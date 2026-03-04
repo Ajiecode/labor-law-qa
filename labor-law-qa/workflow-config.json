@@ -1,0 +1,67 @@
+{
+  "workflow": {
+    "name": "劳动法智能问答",
+    "nodes": [
+      {
+        "id": "start",
+        "type": "start",
+        "position": {"x": 100, "y": 200},
+        "data": {
+          "title": "开始",
+          "variables": [
+            {
+              "name": "query",
+              "type": "text-input",
+              "label": "用户问题",
+              "required": true
+            }
+          ]
+        }
+      },
+      {
+        "id": "knowledge",
+        "type": "knowledge-retrieval",
+        "position": {"x": 300, "y": 200},
+        "data": {
+          "title": "知识检索",
+          "knowledge_base_id": "你的知识库ID",
+          "query_variable": "{{start.query}}",
+          "top_k": 5,
+          "score_threshold": 0.7
+        }
+      },
+      {
+        "id": "llm",
+        "type": "llm",
+        "position": {"x": 500, "y": 200},
+        "data": {
+          "title": "LLM回答",
+          "model": "你的模型名称",
+          "system_prompt": "你是一个专业的劳动法律咨询助手，专门帮助用户解答关于《中华人民共和国劳动合同法》的问题。\n\n回答要求：\n1. 只基于提供的知识库内容回答，不要编造法律条文\n2. 回答要准确、清晰、简洁\n3. 如果问题与劳动合同法无关，礼貌地说明无法回答\n4. 引用相关法条时，说明具体条款编号\n5. 适当使用表格或列表使回答更清晰\n6. 对于复杂问题，先给出结论，再解释原因",
+          "context": "{{knowledge.results}}",
+          "query": "{{start.query}}"
+        }
+      },
+      {
+        "id": "end",
+        "type": "end",
+        "position": {"x": 700, "y": 200},
+        "data": {
+          "title": "结束",
+          "outputs": [
+            {
+              "name": "answer",
+              "type": "text",
+              "value": "{{llm.text}}"
+            }
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {"source": "start", "target": "knowledge"},
+      {"source": "knowledge", "target": "llm"},
+      {"source": "llm", "target": "end"}
+    ]
+  }
+}
