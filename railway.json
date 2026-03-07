@@ -1,9 +1,9 @@
 {
   "$schema": "https://railway.com/railway.json",
   "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "pip install -r backend/requirements.txt",
-    "runCommand": "cd backend && gunicorn --bind 0.0.0.0:$PORT app:app"
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile",
+    "context": "."
   },
   "deploy": {
     "numReplicas": 1,
