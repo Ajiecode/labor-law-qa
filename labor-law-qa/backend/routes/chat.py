@@ -12,7 +12,7 @@ from datetime import datetime
 bp = Blueprint('chat', __name__)
 
 DIFY_API_URL = 'https://api.dify.ai/v1'
-DIFY_API_KEY = ''  # 在部署时设置
+DIFY_API_KEY = os.environ.get('DIFY_API_KEY', '')
 
 @bp.route('/ask', methods=['POST'])
 @jwt_required()
